@@ -1,0 +1,23 @@
+#!/usr/bin/env python
+
+import argparse
+import vm_executor
+
+def run(args):
+    print(args)
+    if args.all:
+        args.vm = [i for i in range(1, 11)]
+        print("Running all:", args.vm)
+    else:
+        assert args.vm != None, 'Please either specify the VM number or the "-all" flag'
+
+    executor = vm_executor.VMExecutor(args.vm, username=args.user)
+    executor.run(args.cmd)
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser('Tool to connect or run commands on uiuc425 vms')
+    parser.add_argument('-vm', type=int, help='VM number to run or connect. (1~10)')
+    parser.add_argument('-all', action='store_true', help='Specify this flag to run on all machines')
+    parser.add_argument('-cmd', type=str, help='Command to be ran on one/all machines')
+    parser.add_argument('-user', default='poweiww2', help='your user name')
+    run(parser.parse_args())

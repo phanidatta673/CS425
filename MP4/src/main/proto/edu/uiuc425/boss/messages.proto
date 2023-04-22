@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+package edu.uiuc425.boss;
+
+option java_outer_classname = "MessagesProto";
+option java_package = "edu.uiuc425.boss.messages";
+
+option java_multiple_files = true;
+
+message Request {
+  oneof content {
+    PutRequest putReq = 1;
+    GetRequest getReq = 2;
+    DeleteRequest deleteReq = 3;
+    ListRequest listReq = 4;
+  }
+}
+
+message PutRequest {
+  FileHeader fileHeader = 1;
+}
+
+message GetRequest {
+  FileHeader fileHeader = 1;
+}
+
+message DeleteRequest {
+  FileHeader fileHeader = 1;
+}
+
+message ListRequest {
+  FileHeader fileHeader = 1;
+}
+
+enum State {
+  ACK = 0;
+  NACK = 1;
+}
+
+message Response {
+  optional string jobName = 1;
+  oneof content {
+    PutResponse putRes = 2;
+    GetResponse getRes = 3;
+    DeleteResponse deleteRes = 4;
+    ListResponse listRes = 5;
+  }
+}
+
+message PutResponse {
+  State state = 1;
+}
+
+message GetResponse {
+  State state = 1;
+  FileHeader fileHeader = 2;
+}
+
+message DeleteResponse {
+  State state = 1;
+}
+
+message ListResponse {
+  State state = 1;
+  repeated int32 replicants = 2;
+}
+
+message FileHeader {
+  string name = 1;
+  int64 size = 2;
+  int32 version = 3;
+}
